@@ -1,5 +1,8 @@
 package com.yeferson.lab13animaciones.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -23,6 +26,8 @@ fun Ejercicio2Screen() {
     val colorName = if (isBlue) "OCEAN BLUE" else "NEON GREEN"
     val hexCode = if (isBlue) "#3985FF" else "#B9F36A"
 
+    val animatedColor by animateColorAsState(targetValue = currentColor, animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing), label = "colorTransition")
+
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -39,7 +44,7 @@ fun Ejercicio2Screen() {
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                Box(modifier = Modifier.fillMaxWidth().height(190.dp).clip(RoundedCornerShape(22.dp)).background(Brush.linearGradient(listOf(currentColor, currentColor.copy(alpha = 0.72f)))), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxWidth().height(190.dp).clip(RoundedCornerShape(22.dp)).background(Brush.linearGradient(listOf(animatedColor, animatedColor.copy(alpha = 0.72f)))), contentAlignment = Alignment.Center) {
                     Box(modifier = Modifier.size(145.dp).border(1.dp, Color.White.copy(alpha = 0.25f), CircleShape).padding(12.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Aa", color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold)
@@ -55,13 +60,13 @@ fun Ejercicio2Screen() {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Box(modifier = Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)).background(currentColor))
+                    Box(modifier = Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)).background(animatedColor))
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(colorName, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                         Text(hexCode, color = Color(0xFF9AA3B2), fontSize = 12.sp)
                     }
-                    Text("●", color = currentColor, fontSize = 23.sp)
+                    Text("●", color = animatedColor, fontSize = 23.sp)
                 }
 
                 Spacer(modifier = Modifier.height(18.dp))
