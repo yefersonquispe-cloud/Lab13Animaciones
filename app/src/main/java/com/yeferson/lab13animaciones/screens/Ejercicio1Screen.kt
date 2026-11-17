@@ -1,6 +1,9 @@
 package com.yeferson.lab13animaciones.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,7 +38,11 @@ fun Ejercicio1Screen() {
             ) {
                 Text("Control de visibilidad", color = Color.White, fontSize = 19.sp)
 
-                AnimatedVisibility(visible = isVisible) {
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(600)),
+                    exit = fadeOut(animationSpec = tween(400))
+                ) {
                     Box(
                         modifier = Modifier.size(110.dp).background(Color(0xFFB9F36A), RoundedCornerShape(22.dp)),
                         contentAlignment = Alignment.Center
