@@ -2,6 +2,8 @@ package com.yeferson.lab13animaciones.screens
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,11 +24,13 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Ejercicio2Screen() {
     var isBlue by remember { mutableStateOf(true) }
+    var useSpring by remember { mutableStateOf(false) }
+
     val currentColor = if (isBlue) Color(0xFF3985FF) else Color(0xFFB9F36A)
     val colorName = if (isBlue) "OCEAN BLUE" else "NEON GREEN"
     val hexCode = if (isBlue) "#3985FF" else "#B9F36A"
 
-    val animatedColor by animateColorAsState(targetValue = currentColor, animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing), label = "colorTransition")
+    val animatedColor by animateColorAsState(targetValue = currentColor, animationSpec = if (useSpring) spring<Color>(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow) else tween<Color>(durationMillis = 1000, easing = FastOutSlowInEasing), label = "colorTransition")
 
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -73,10 +77,24 @@ fun Ejercicio2Screen() {
                 HorizontalDivider(color = Color.White.copy(alpha = 0.08f))
                 Spacer(modifier = Modifier.height(18.dp))
 
+                Text("TIPO DE ANIMACIÓN", color = Color(0xFF9AA3B2), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(onClick = { useSpring = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = if (!useSpring) Color(0xFFB9F36A) else Color(0xFF263247))) {
+                        Text("TWEEN", color = if (!useSpring) Color(0xFF101522) else Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    }
+                    Button(onClick = { useSpring = true }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = if (useSpring) Color(0xFFB9F36A) else Color(0xFF263247))) {
+                        Text("SPRING", color = if (useSpring) Color(0xFF101522) else Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text("CAMBIAR PALETA", color = Color(0xFF9AA3B2), fontSize = 10.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Button(onClick = { isBlue = !isBlue }, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = currentColor)) {
+                Button(onClick = { isBlue = !isBlue }, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = animatedColor)) {
                     Text(if (isBlue) "CAMBIAR A VERDE" else "CAMBIAR A AZUL", color = Color(0xFF101522), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
             }
