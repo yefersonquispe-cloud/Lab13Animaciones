@@ -1,5 +1,7 @@
 package com.yeferson.lab13animaciones.screens
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,7 +21,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Ejercicio3Screen() {
     var isExpanded by remember { mutableStateOf(false) }
-    val boxSize = if (isExpanded) 110.dp else 70.dp
+    val targetBoxSize = if (isExpanded) 110.dp else 70.dp
+    val boxSize by animateDpAsState(targetValue = targetBoxSize, animationSpec = tween(durationMillis = 800), label = "boxSize")
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF151D2C))) {
@@ -39,8 +42,11 @@ fun Ejercicio3Screen() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth().height(230.dp).clip(RoundedCornerShape(22.dp)).background(Color(0xFF0D1422)).border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(22.dp))) {
-                    val positionX = if (isExpanded) maxWidth - boxSize - 20.dp else 20.dp
-                    val positionY = if (isExpanded) maxHeight - boxSize - 20.dp else 20.dp
+                    val targetX = if (isExpanded) maxWidth - targetBoxSize - 20.dp else 20.dp
+                    val targetY = if (isExpanded) maxHeight - targetBoxSize - 20.dp else 20.dp
+                    val positionX by animateDpAsState(targetValue = targetX, animationSpec = tween(durationMillis = 800), label = "positionX")
+                    val positionY by animateDpAsState(targetValue = targetY, animationSpec = tween(durationMillis = 800), label = "positionY")
+
                     Box(modifier = Modifier.offset(x = positionX, y = positionY).size(boxSize).clip(RoundedCornerShape(22.dp)).background(Brush.linearGradient(listOf(Color(0xFFB9F36A), Color(0xFF65D6C4)))), contentAlignment = Alignment.Center) {
                         Text("03", color = Color(0xFF101522), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
