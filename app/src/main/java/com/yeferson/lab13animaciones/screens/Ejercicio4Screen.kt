@@ -1,6 +1,10 @@
 package com.yeferson.lab13animaciones.screens
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -62,6 +66,10 @@ fun Ejercicio4Screen() {
                 Spacer(modifier = Modifier.height(20.dp))
                 AnimatedContent(
                     targetState = currentState,
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(800)) togetherWith
+                                fadeOut(animationSpec = tween(500))
+                    },
                     label = "StateTransition"
                 ) { targetState ->
                     val accentColor = when (targetState) {
