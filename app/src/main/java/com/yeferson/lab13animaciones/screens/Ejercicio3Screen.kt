@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Ejercicio3Screen() {
     var isExpanded by remember { mutableStateOf(false) }
+    var offsetFirst by remember { mutableStateOf(true) }
     val targetBoxSize = if (isExpanded) 110.dp else 70.dp
     val boxSize by animateDpAsState(targetValue = targetBoxSize, animationSpec = tween(durationMillis = 800), label = "boxSize")
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -47,12 +48,12 @@ fun Ejercicio3Screen() {
                     val positionX by animateDpAsState(targetValue = targetX, animationSpec = tween(durationMillis = 800), label = "positionX")
                     val positionY by animateDpAsState(targetValue = targetY, animationSpec = tween(durationMillis = 800), label = "positionY")
 
-                    Box(modifier = Modifier.offset(x = positionX, y = positionY).size(boxSize).clip(RoundedCornerShape(22.dp)).background(Brush.linearGradient(listOf(Color(0xFFB9F36A), Color(0xFF65D6C4)))), contentAlignment = Alignment.Center) {
+                    val boxModifier = if (offsetFirst) Modifier.offset(x = positionX, y = positionY).size(boxSize) else Modifier.size(boxSize).offset(x = positionX, y = positionY)
+                    Box(modifier = boxModifier.clip(RoundedCornerShape(22.dp)).background(Brush.linearGradient(listOf(Color(0xFFB9F36A), Color(0xFF65D6C4)))), contentAlignment = Alignment.Center) {
                         Text("03", color = Color(0xFF101522), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
                     Text("PLAY AREA", modifier = Modifier.align(Alignment.BottomStart).padding(12.dp), color = Color(0xFF9AA3B2), fontSize = 9.sp, fontWeight = FontWeight.Bold)
                 }
-
                 Spacer(modifier = Modifier.height(18.dp))
                 Text("ESTADO ACTUAL", color = Color(0xFF9AA3B2), fontSize = 10.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(10.dp))
@@ -67,9 +68,21 @@ fun Ejercicio3Screen() {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
-                HorizontalDivider(color = Color.White.copy(alpha = 0.08f))
                 Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(color = Color.White.copy(alpha = 0.08f))
+                Spacer(modifier = Modifier.height(14.dp))
+                Text("ORDEN DE MODIFICADORES", color = Color(0xFF9AA3B2), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(9.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { offsetFirst = true }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = if (offsetFirst) Color(0xFFB9F36A) else Color(0xFF263247))) {
+                        Text("OFFSET → SIZE", color = if (offsetFirst) Color(0xFF101522) else Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                    }
+                    Button(onClick = { offsetFirst = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = if (!offsetFirst) Color(0xFFB9F36A) else Color(0xFF263247))) {
+                        Text("SIZE → OFFSET", color = if (!offsetFirst) Color(0xFF101522) else Color.White, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+                Spacer(modifier = Modifier.height(14.dp))
+
                 Button(onClick = { isExpanded = !isExpanded }, modifier = Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB9F36A))) {
                     Text(if (isExpanded) "RESTAURAR POSICIÓN" else "MOVER Y CAMBIAR TAMAÑO", color = Color(0xFF101522), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
@@ -77,6 +90,7 @@ fun Ejercicio3Screen() {
         }
 
         Spacer(modifier = Modifier.height(15.dp))
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("●", color = Color(0xFFB9F36A), fontSize = 12.sp)
             Spacer(modifier = Modifier.width(7.dp))
